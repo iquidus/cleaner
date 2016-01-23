@@ -1,0 +1,14 @@
+/*
+  This file must be valid JSON. But comments are allowed
+
+  Please edit settings.json, not settings.json.template
+*/
+{
+  // wallet settings
+  "wallet": {
+    "host": "localhost",
+    "port": 51716,
+    "user": "jumbucksrpc",
+    "pass": "password"
+  },
+}

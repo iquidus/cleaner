@@ -1,0 +1,9 @@
+{
+  "name": "Cleaner",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "bitcoin": "3.0.1",
+    "jsonminify": "0.2.3"
+  }
+}
