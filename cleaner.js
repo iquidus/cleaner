@@ -9,7 +9,9 @@ function usage() {
 }
 
 var address = '';
-var maxAmount = 10000;
+var maxAmount = 0;
+var restrictAmount = false;
+
 var COIN = 100000000;
 var FEE = settings.fee;
 
@@ -22,6 +24,7 @@ if (process.argv.length < 3) {
 
 if (process.argv.length > 3) {
   maxAmount = process.argv[3];
+  restrictAmount = true;
 }
 
 // wallet daemon
@@ -36,10 +39,12 @@ lib.verify_address(rpc, address, function(isValid) {
     var total = 0;
     rpc.listUnspent(10, function(err, res){
       for (var i = 0; i < res.length; i++) {
-        if (res[i].address === address && res[i].amount < maxAmount && txCount < settings.maxInputs) {
-          txCount += 1;
-          txs.push({txid: res[i].txid, vout: res[i].vout});
-          total = total + (res[i].amount * COIN);
+        if (res[i].address === address && txCount < settings.maxInputs) {
+          if (res[i].amount < maxAmount || restrictAmount === false) {
+            txCount += 1;
+            txs.push({txid: res[i].txid, vout: res[i].vout});
+            total = total + (res[i].amount * COIN);
+          }
         }
         if (i === res.length - 1) {
           var obj = {};
