@@ -18,6 +18,7 @@ var minAmount = 750;
 var maxTx = 67;
 
 var COIN = 100000000;
+var FEE = 1000000; // in sats
 
 if (process.argv.length < 3) {
   usage();
@@ -48,17 +49,17 @@ lib.verify_address(rpc, address, function(isValid) {
         }
         if (i === res.length - 1) {
           var obj = {};
-          obj[address] = (total / COIN);
+          obj[address] = ((total - FEE) / COIN);
           rpc.createRawTransaction(txs, obj, function(err, hex){
             if (err) {
               console.log(err);
               process.exit(0);
             } else {
-              rpc.signRawTransaction(hex, function(err, signedhex){
+              rpc.signRawTransaction(hex, function(err, signedtx){
                 if (err) {
                   console.log(err);
                 } else {
-                  rpc.sendRawTransaction(signedhex, function(err, txid) {
+                  rpc.sendRawTransaction(signedtx.hex, function(err, txid) {
                     if (err) {
                       console.log(err);
                     } else {
