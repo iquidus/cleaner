@@ -15,10 +15,10 @@ function usage() {
 // 3 = minAmount (default 750)
 var address = '';
 var minAmount = 750;
-var maxTx = 67;
+
 
 var COIN = 100000000;
-var FEE = 1000000; // in sats
+var FEE = settings.fee;
 
 if (process.argv.length < 3) {
   usage();
@@ -42,7 +42,7 @@ lib.verify_address(rpc, address, function(isValid) {
     var total = 0;
     rpc.listUnspent(10, function(err, res){
       for (var i = 0; i < res.length; i++) {
-        if (res[i].address === address && res[i].amount < minAmount && txCount < maxTx) {
+        if (res[i].address === address && res[i].amount < minAmount && txCount < settings.maxInputs) {
           txCount += 1;
           txs.push({txid: res[i].txid, vout: res[i].vout});
           total = total + (res[i].amount * COIN);

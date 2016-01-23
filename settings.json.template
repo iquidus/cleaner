@@ -11,4 +11,8 @@
     "user": "jumbucksrpc",
     "pass": "password"
   },
+  // max inputs per tx
+  "maxInputs": 67,
+  // amount to reserve for fee (in satoshis)
+  "fee": 10000000
 }
