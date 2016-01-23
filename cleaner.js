@@ -3,23 +3,17 @@ var lib = require('./lib/wallet.js');
 
 // displays usage and exits
 function usage() {
-  console.log('Usage: node cleanup.js [address] [minAmount]');
+  console.log('Usage: node cleanup.js [address] [maxAmount]');
   console.log('');
   process.exit(0);
 }
 
-// check options
-// 0 = node
-// 1 = cleanup.js
-// 2 = address
-// 3 = minAmount (default 750)
 var address = '';
-var minAmount = 750;
-
-
+var maxAmount = 10000;
 var COIN = 100000000;
 var FEE = settings.fee;
 
+// check arguments
 if (process.argv.length < 3) {
   usage();
 } else {
@@ -27,7 +21,7 @@ if (process.argv.length < 3) {
 }
 
 if (process.argv.length > 3) {
-  minAmount = process.argv[3];
+  maxAmount = process.argv[3];
 }
 
 // wallet daemon
@@ -42,7 +36,7 @@ lib.verify_address(rpc, address, function(isValid) {
     var total = 0;
     rpc.listUnspent(10, function(err, res){
       for (var i = 0; i < res.length; i++) {
-        if (res[i].address === address && res[i].amount < minAmount && txCount < settings.maxInputs) {
+        if (res[i].address === address && res[i].amount < maxAmount && txCount < settings.maxInputs) {
           txCount += 1;
           txs.push({txid: res[i].txid, vout: res[i].vout});
           total = total + (res[i].amount * COIN);
