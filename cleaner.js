@@ -54,11 +54,17 @@ lib.verify_address(rpc, address, function(isValid) {
               console.log(err);
               process.exit(0);
             } else {
-              rpc.sendRawTransaction(hex, function(err, txid) {
+              rpc.signRawTransaction(hex, function(err, signedhex){
                 if (err) {
                   console.log(err);
                 } else {
-                  console.log(txid);
+                  rpc.sendRawTransaction(signedhex, function(err, txid) {
+                    if (err) {
+                      console.log(err);
+                    } else {
+                      console.log(txid);
+                    }
+                  });
                 }
               });
             }
